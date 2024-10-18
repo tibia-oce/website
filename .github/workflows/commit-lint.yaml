@@ -6,10 +6,28 @@ on:
     branches:
       - master
       - develop
+    paths:
+      - "admin/**"
+      - "docker/**"
+      - "plugins/**"
+      - "images/**"
+      - "system/**"
+      - "templates/**"
+      - "tools/**"
+      - "xml/**"
   push:
     branches:
       - master
       - develop
+    paths:
+      - "admin/**"
+      - "docker/**"
+      - "plugins/**"
+      - "images/**"
+      - "system/**"
+      - "templates/**"
+      - "tools/**"
+      - "xml/**"
 
 permissions:
   contents: read

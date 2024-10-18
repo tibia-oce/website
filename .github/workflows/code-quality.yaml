@@ -7,15 +7,27 @@ on:
       - master
       - develop
     paths:
-      - "src/**"
-      - "data/**"
+      - "admin/**"
+      - "docker/**"
+      - "plugins/**"
+      - "images/**"
+      - "system/**"
+      - "templates/**"
+      - "tools/**"
+      - "xml/**"
   push:
     branches:
       - master
       - develop
     paths:
-      - "src/**"
-      - "data/**"
+      - "admin/**"
+      - "docker/**"
+      - "plugins/**"
+      - "images/**"
+      - "system/**"
+      - "templates/**"
+      - "tools/**"
+      - "xml/**"
 
 jobs:
   phplint:

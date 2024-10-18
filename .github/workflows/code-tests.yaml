@@ -7,18 +7,30 @@ on:
       - master
       - develop
     paths:
-      - "src/**"
-      - "data/**"
+      - "admin/**"
+      - "docker/**"
+      - "plugins/**"
+      - "images/**"
+      - "system/**"
+      - "templates/**"
+      - "tools/**"
+      - "xml/**"
   push:
     branches:
       - master
       - develop
     paths:
-      - "src/**"
-      - "data/**"
+      - "admin/**"
+      - "docker/**"
+      - "plugins/**"
+      - "images/**"
+      - "system/**"
+      - "templates/**"
+      - "tools/**"
+      - "xml/**"
 
 jobs:
-  lua:
+  php:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code.
@@ -26,15 +38,5 @@ jobs:
 
       # todo: doesn't look like existing canary or tfs use lua testing yet
       # consider testing on new modules instead
-      - name: Linting and formatting
-        run: true
-
-  cpp:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      # todo: see example https://github.com/opentibiabr/canary/tree/main/tests
-      - name: Linting and formatting
+      - name: Php tests
         run: true
