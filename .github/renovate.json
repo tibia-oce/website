@@ -1,0 +1,10 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "dependencyDashboardTitle": "Renovate Dashboard 🤖",
+  "suppressNotifications": ["prEditedNotification", "prIgnoreNotification"],
+  "baseBranches": ["develop"],
+  "extends": [
+      "config:recommended",
+      "github>tibia-oce/website//.github/renovate/auto-merge.json"
+  ]
+}
