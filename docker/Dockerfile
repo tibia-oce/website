@@ -1,4 +1,4 @@
-FROM php:8.2-apache AS base
+FROM php:8.3-apache AS base
 
 ARG APCU_VERSION=5.1.22
 ARG user
