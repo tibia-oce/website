@@ -268,7 +268,7 @@ class CreateCharacter
 			'title' => 'Character Created',
 			'description' => 'The character <b>' . $name . '</b> has been created.<br/>
 					Please select the outfit when you log in for the first time.<br/><br/>
-					<b>See you on ' . configLua('serverName') . '!</b>'
+					<b>See you on Mythbound!</b>'
 		));
 
 		// todo: each time logAction is called, it will create a new entry in the database, which is not needed?

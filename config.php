@@ -50,7 +50,7 @@ $config = array(
     // Other dupes from server/conf lua
     'ip' => getenv('SERVER_IP') ?: '0.0.0.0',
     'gameProtocolPort' => getenv('GAME_PROTOCOL_PORT') ?: 7171,
-    'serverName' => getenv('SERVER_NAME') ?: 'Black Tek',
+    'serverName' => getenv('SERVER_NAME') ?: 'Mythbound',
     'pvptype' => getenv('WORLD_TYPE') ?: 'pvp',
     'freePremium' => getenv('freePremium') ?: 'true',
 
