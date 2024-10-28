@@ -327,9 +327,9 @@ $config = array(
 
 	// status, took automatically from config file if empty
 	'status_enabled' => true, // you can disable status checking by settings this to "false"
-	'status_ip' => '127.0.0.1',
-	'status_port' => '',
-	'status_timeout' => 1.0, // how long to wait for the initial response from the server (default: 1 second)
+	'status_ip' => 'http://game.mythbound.dev/',
+	'status_port' => '7171',
+	'status_timeout' => 3.0, // how long to wait for the initial response from the server (default: 1 second)
 
 	// how often to connect to server and update status (default: every minute)
 	// if your status timeout in config lua is bigger, that it will be used instead
