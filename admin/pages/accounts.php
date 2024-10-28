@@ -45,7 +45,7 @@ $hasGroupColumn = $db->hasColumn('accounts', 'group_id');
 
 if ($config['account_country']) {
 	$countries = array();
-	foreach (array('pl', 'se', 'br', 'us', 'gb') as $c)
+	foreach (array('au', 'nz', 'pl', 'se', 'br', 'us', 'gb') as $c)
 		$countries[$c] = $config['countries'][$c];
 
 	$countries['--'] = '----------';
