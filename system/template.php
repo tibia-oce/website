@@ -107,7 +107,7 @@ foreach($links as $link) {
 	$template['link_' . $link] = getLink($link);
 }
 
-$template['link_screenshots'] = getLink('gallery');
+// $template['link_screenshots'] = getLink('gallery');
 $template['link_movies'] = getLink('videos');
 
 $template['link_gifts_history'] = getLink('gifts', 'history');
