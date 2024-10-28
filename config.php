@@ -150,8 +150,8 @@ $config = array(
 
 	// account
 	'account_management' => true, // disable if you're using other method to manage users (fe. tfs account manager)
-	'account_create_auto_login' => false, // auto login after creating account?
-	'account_create_character_create' => true, // allow directly to create character on create account page?
+	'account_create_auto_login' => true, // auto login after creating account?
+	'account_create_character_create' => false, // allow directly to create character on create account page?
 	'account_mail_verify' => false, // force users to confirm their email addresses when registering
 	'account_mail_confirmed_reward' => [ // reward users for confirming their E-Mails
 		// account_mail_verify needs to be enabled too
@@ -163,7 +163,7 @@ $config = array(
 	'account_mail_unique' => true, // email addresses cannot be duplicated? (one account = one email)
 	'account_premium_days' => 300, // default premium days on new account
 	'account_premium_points' => 0, // default premium points on new account
-	'account_welcome_mail' => true, // send welcome email when user registers
+	'account_welcome_mail' => false, // send welcome email when user registers
 	'account_mail_change' => 2, // how many days user need to change email to account - block hackers
 	'account_country' => true, // user will be able to set country of origin when registering account, this information will be viewable in others places aswell
 	'account_country_recognize' => false, // BUGGED!!!! should country of user be automatically recognized by his IP? This makes an external API call to http://ipinfo.io
@@ -184,7 +184,7 @@ $config = array(
 	'smtp_enabled' => false, // send by smtp or mail function (set false if use mail function, set to true if you use GMail or Microsoft Outlook)
 	'smtp_host' => '', // mail host. smtp.gmail.com for GMail / smtp-mail.outlook.com for Microsoft Outlook
 	'smtp_port' => 25, // 25 (default) / 465 (ssl, GMail) / 587 (tls, Microsoft Outlook)
-	'smtp_auth' => true, // need authorization?
+	'smtp_auth' => false, // need authorization?
 	'smtp_user' => 'admin@example.org', // here your email username
 	'smtp_pass' => '',
 	'smtp_secure' => '', // What kind of encryption to use on the SMTP connection. Options: '', 'ssl' (GMail) or 'tls' (Microsoft Outlook)

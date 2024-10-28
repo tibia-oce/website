@@ -130,13 +130,7 @@ if($save)
 		'accept_rules' => isset($_POST['accept_rules']) ? $_POST['accept_rules'] === 'true' : false,
 	);
 
-	if(USE_ACCOUNT_NAME) {
-		$params['account_name'] = $_POST['account'];
-	}
-	else {
-		$params['account_id'] = $_POST['account'];
-	}
-
+	$params['account_name'] = $_POST['account'];
 	$hooks->trigger(HOOK_ACCOUNT_CREATE_AFTER_SUBMIT, $params);
 
 	if(config('account_create_character_create')) {
@@ -144,17 +138,13 @@ if($save)
 		$character_sex = isset($_POST['sex']) ? (int)$_POST['sex'] : null;
 		$character_vocation = isset($_POST['vocation']) ? (int)$_POST['vocation'] : null;
 		$character_town = isset($_POST['town']) ? (int)$_POST['town'] : null;
-
 		$createCharacter->check($character_name, $character_sex, $character_vocation, $character_town, $errors);
 	}
 
 	if(empty($errors))
 	{
 		$new_account = new OTS_Account();
-		if(USE_ACCOUNT_NAME)
-			$new_account->create($account_name);
-		else
-			$new_account->create(NULL, $account_id);
+		$new_account->create($account_name);
 
 		$config_salt_enabled = $db->hasColumn('accounts', 'salt');
 		if($config_salt_enabled)
@@ -308,7 +298,7 @@ if(!empty($errors))
 
 if($config['account_country']) {
 	$countries = array();
-	foreach (array('pl', 'se', 'br', 'us', 'gb') as $c)
+	foreach (array('au', 'nz', 'pl', 'se', 'br', 'us', 'gb') as $c)
 		$countries[$c] = $config['countries'][$c];
 
 	$countries['--'] = '----------';
