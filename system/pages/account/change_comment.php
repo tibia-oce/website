@@ -30,7 +30,9 @@ if($player_name != null) {
 					if(empty($errors)) {
 						$player->setCustomField("hidden", $new_hideacc);
 						$player->setCustomField("comment", $new_comment);
-						$account_logged->logAction('Changed comment for character <b>' . $player->getName() . '</b>.');
+						// todo: log actions are disabled for now, the table needs refactoring and can better be
+						// used by prometheus.  currently causing crashes
+						// $account_logged->logAction('Changed comment for character <b>' . $player->getName() . '</b>.');
 						$twig->display('success.html.twig', array(
 							'title' => 'Character Information Changed',
 							'description' => 'The character information has been changed.'
