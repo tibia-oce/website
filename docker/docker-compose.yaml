@@ -4,21 +4,41 @@ services:
     container_name: database
     image: mariadb:latest
     restart: unless-stopped
-    env_file:
-      - '../.env'
-    networks:
-      - tibia
     ports:
       - "3306:3306"
-    volumes:
-      - 'database:/var/lib/mysql'
-      - './schema.sql:/docker-entrypoint-initdb.d/init.sql'
     healthcheck:
-      test: ["CMD", "healthcheck.sh"]
-      start_period: 10s
-      interval: 10s
+      test: ["CMD", "/usr/bin/mysql", "--user=$$MYSQL_USER",  "--password=$$MYSQL_ROOT_PASSWORD", "--execute", "SHOW DATABASES;"]
+      start_period: 5s
+      interval: 5s
       timeout: 5s
-      retries: 3
+      retries: 10
+    env_file:
+    - '../.env'
+    networks:
+      - tibia
+
+  check-db-started:
+    container_name: db-healthcheck
+    image: jwilder/dockerize:0.6.1    
+    env_file:
+      - '../.env'     
+    depends_on:
+      - database          
+    command: 'dockerize -wait=tcp://database:3306 -timeout 30s'
+    networks:
+      - tibia
+
+  migrate:
+    container_name: migrations
+    image: ghcr.io/tibia-oce/migrate:latest
+    restart: "no"
+    networks:
+      - tibia
+    depends_on:
+      check-db-started:
+        condition: service_completed_successfully
+    env_file:
+      - '../.env'
 
   phpmyadmin:
     container_name: phpmyadmin
@@ -31,12 +51,13 @@ services:
     ports:
       - 5001:80
     depends_on:
-      - database
+      migrate:
+        condition: service_completed_successfully
       
   website:
     container_name: website
     ports:
-      - 5000:80
+      - 5002:80
     build:
       args:
         user: www-data
@@ -49,27 +70,11 @@ services:
     networks:
       - tibia
     depends_on:
-      - database
-      - phpmyadmin
-
-  server:
-    container_name: server
-    image: ghcr.io/tibia-oce/server:latest
-    restart: always
-    ports:
-      - 7171:7171
-      - 7172:7172
-    networks:
-      - tibia
-    depends_on:
-      - database
-      - website
-      - phpmyadmin
-    env_file:
-      - '../.env'
+      migrate:
+        condition: service_completed_successfully
 
 volumes:
-  database:
+  tibia:
 
 networks:
   tibia:
