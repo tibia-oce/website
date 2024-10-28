@@ -227,36 +227,39 @@ class CreateCharacter
 			$player->setLossContainers($char_to_copy->getLossContainers());
 		}
 
+		// Save player to the database without manually setting `player_id`
 		$player->save();
-		$player->setCustomField('created', time());
 
+		// Fetch auto-incremented `player_id`
+		$player->setCustomField('created', time());
+		$player_id = $player->getId();
+
+		// Reload player by name to ensure it was saved correctly and has an ID
 		$player = new OTS_Player();
 		$player->find($name);
 
-		if(!$player->isLoaded()) {
+		if (!$player->isLoaded()) {
 			error("Error. Can't create character. Probably problem with database. Please try again later or contact with admin.");
 			return false;
 		}
 
-		if($db->hasTable('player_skills')) {
-
-			for($i=0; $i<7; $i++) {
-				$value = 10;
-				if (config('use_character_sample_skills')) {
-					$value = $char_to_copy->getSkill($i);
-				}
-				$skillExists = $db->query('SELECT `skillid` FROM `player_skills` WHERE `player_id` = ' . $player->getId() . ' AND `skillid` = ' . $i);
-				if($skillExists->rowCount() <= 0) {
-					$db->query('INSERT INTO `player_skills` (`player_id`, `skillid`, `value`, `count`) VALUES ('.$player->getId().', '.$i.', ' . $value . ', 0)');
+		// Set player skills, ensuring `player_id` is only referenced after it’s auto-generated
+		if ($db->hasTable('player_skills')) {
+			for ($i = 0; $i < 7; $i++) {
+				$value = config('use_character_sample_skills') ? $char_to_copy->getSkill($i) : 10;
+				$skillExists = $db->query('SELECT `skillid` FROM `player_skills` WHERE `player_id` = ' . $player_id . ' AND `skillid` = ' . $i);
+				if ($skillExists->rowCount() <= 0) {
+					$db->query('INSERT INTO `player_skills` (`player_id`, `skillid`, `value`, `count`) VALUES (' . $player_id . ', ' . $i . ', ' . $value . ', 0)');
 				}
 			}
 		}
 
-		if ($db->hasTable('player_items') && $db->hasColumn('player_items', 'pid') && $db->hasColumn('player_items', 'sid') && $db->hasColumn('player_items', 'itemtype')) {
-			$loaded_items_to_copy = $db->query("SELECT * FROM player_items WHERE player_id = ".$char_to_copy->getId()."");
-			foreach($loaded_items_to_copy as $save_item) {
+		// Insert player items only after confirming the player's ID
+		if ($db->hasTable('player_items')) {
+			$loaded_items_to_copy = $db->query("SELECT * FROM player_items WHERE player_id = " . $char_to_copy->getId());
+			foreach ($loaded_items_to_copy as $save_item) {
 				$blob = $db->quote($save_item['attributes']);
-				$db->query("INSERT INTO `player_items` (`player_id` ,`pid` ,`sid` ,`itemtype`, `count`, `attributes`) VALUES ('".$player->getId()."', '".$save_item['pid']."', '".$save_item['sid']."', '".$save_item['itemtype']."', '".$save_item['count']."', $blob);");
+				$db->query("INSERT INTO `player_items` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ('$player_id', '{$save_item['pid']}', '{$save_item['sid']}', '{$save_item['itemtype']}', '{$save_item['count']}', $blob)");
 			}
 		}
 
@@ -268,7 +271,11 @@ class CreateCharacter
 					<b>See you on ' . configLua('serverName') . '!</b>'
 		));
 
-		$account->logAction('Created character <b>' . $name . '</b>.');
+		// todo: each time logAction is called, it will create a new entry in the database, which is not needed?
+			// public function logAction($action)
+			// 	return $this->db->exec('INSERT INTO `' . TABLE_PREFIX . 'account_actions` (`account_id`, `ip`, `ipv6`, `date`, `action`) VALUES (' . $this->db->quote($this->getId()).', ' . ($ip == '' ? '0' : $this->db->quote(ip2long($ip))) . ', (' . ($ipv6 == '0' ? $this->db->quote('') : $this->db->quote(inet_pton($ipv6))) . '), UNIX_TIMESTAMP(NOW()), ' . $this->db->quote($action).')');
+		// $account->logAction('Created character <b>' . $name . '</b>.');
+
 		return true;
 	}
 }

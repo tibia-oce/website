@@ -136,24 +136,24 @@ class OTS_Account extends OTS_Row_DAO implements IteratorAggregate, Countable
  * @throws Exception ON lastInsertId error.
  * @deprecated 0.1.5 Use createNamed().
  */
-    public function create($name = NULL, $id = NULL)
+    public function create($name = NULL)
     {
-        // saves blank account info
-        $this->db->exec('INSERT INTO `accounts` (' . (isset($id) ? '`id`,' : '') . (isset($name) ? '`name`,' : '') . '`password`, `email`, `created`) VALUES (' . (isset($id) ? $id . ',' : '') . (isset($name) ? $this->db->quote($name) . ',' : '') . ' \'\', \'\',' . time() . ')');
+        $query = 'INSERT INTO `accounts` (' 
+            . (isset($name) ? '`name`, ' : '') 
+            . '`password`, `email`, `created`) VALUES (' 
+            . (isset($name) ? $this->db->quote($name) . ', ' : '') 
+            . '\'\' ,\'\', ' . time() . ')';
 
-		if(isset($name))
-			$this->data['name'] = $name;
+        $this->db->exec($query);
 
-		$lastInsertId = $this->db->lastInsertId();
-		if($lastInsertId != 0) {
-			$this->data['id'] = $lastInsertId;
-		}
-		elseif (isset($id)) {
-			$this->data['id'] = $id;
-		}
-		else {
-			throw new Exception(__CLASS__ . ':' . __METHOD__ . ' unexpected error. Please report to MyAAC Developers.');
-		}
+        $lastInsertId = $this->db->lastInsertId();
+        if ($lastInsertId == 0) {
+            throw new Exception(__CLASS__ . ':' . __METHOD__ . ' unexpected error. Please report to MyAAC Developers.');
+        }
+        $this->data['id'] = $lastInsertId;
+        if (isset($name)) {
+            $this->data['name'] = $name;
+        }
 
         return $this->data['id'];
     }
