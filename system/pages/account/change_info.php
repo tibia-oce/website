@@ -52,7 +52,7 @@ if($show_form) {
 		$account_country = $account_logged->getCustomField("country");
 
 		$countries = array();
-		foreach (array('pl', 'se', 'br', 'us', 'gb',) as $country)
+		foreach (array('au', 'nz', 'pl', 'se', 'br', 'us', 'gb',) as $country)
 			$countries[$country] = $config['countries'][$country];
 
 		$countries['--'] = '----------';
